@@ -21,15 +21,21 @@ async function run() {
     await client.connect();
     const toolsCollection = client.db("FR-Tools").collection("Tools");
 
-
+    //get all tools
     app.get('/tools', async (req, res) => {
         const query = {}
         const cursor = toolsCollection.find(query)
         const tools = await cursor.toArray()
         res.send(tools)
     })
-
-
+    
+    //get single tool by id
+    app.get("/tools/:id", async (req, res) => {
+        const id = req.params.id;
+        const query = { _id: ObjectId(id) };
+        const tool = await toolsCollection.findOne(query);
+        res.send(tool);
+      });
 
   } finally {
     // await client.close();
