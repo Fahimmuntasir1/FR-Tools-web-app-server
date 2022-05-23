@@ -20,23 +20,34 @@ async function run() {
   try {
     await client.connect();
     const toolsCollection = client.db("FR-Tools").collection("Tools");
+    const userCollection = client.db("FR-Tools").collection("users");
 
     //get all tools
-    app.get('/tools', async (req, res) => {
-        const query = {}
-        const cursor = toolsCollection.find(query)
-        const tools = await cursor.toArray()
-        res.send(tools)
-    })
-    
+    app.get("/tools", async (req, res) => {
+      const query = {};
+      const cursor = toolsCollection.find(query);
+      const tools = await cursor.toArray();
+      res.send(tools);
+    });
+    //create user or update user
+    app.put("/user/:email", async (req, res) => {
+      const email = req.params.email;
+      const user = req.body;
+      const filter = { email: email };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: user,
+      };
+      const result = await userCollection.updateOne(filter, updateDoc, options);
+      res.send(result);
+    });
     //get single tool by id
     app.get("/tools/:id", async (req, res) => {
-        const id = req.params.id;
-        const query = { _id: ObjectId(id) };
-        const tool = await toolsCollection.findOne(query);
-        res.send(tool);
-      });
-
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const tool = await toolsCollection.findOne(query);
+      res.send(tool);
+    });
   } finally {
     // await client.close();
   }
