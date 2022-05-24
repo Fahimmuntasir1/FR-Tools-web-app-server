@@ -23,6 +23,7 @@ async function run() {
     const toolsCollection = client.db("FR-Tools").collection("Tools");
     const userCollection = client.db("FR-Tools").collection("users");
     const reviewsCollection = client.db("FR-Tools").collection("review");
+    const ordersCollection = client.db("FR-Tools").collection("orders");
 
     //get all tools
     app.get("/tools", async (req, res) => {
@@ -62,10 +63,10 @@ async function run() {
       const reviews = await cursor.toArray();
       res.send(reviews);
     });
-    // post / add iteams
+    // post add items
     app.post("/review", async (req, res) => {
-      const newService = req.body;
-      const result = await reviewsCollection.insertOne(newService);
+      const review = req.body;
+      const result = await reviewsCollection.insertOne(review);
       res.send(result);
     });
 
@@ -89,6 +90,15 @@ async function run() {
       );
       res.send(result);
     });
+    // post add items
+    app.post("/order", async (req, res) => {
+      const order = req.body;
+      const result = await ordersCollection.insertOne(order);
+      res.send(result);
+    });
+
+
+
   } finally {
     // await client.close();
   }
