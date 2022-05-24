@@ -68,6 +68,27 @@ async function run() {
       const result = await reviewsCollection.insertOne(newService);
       res.send(result);
     });
+
+    //update quantity
+    app.put("/update/:id", async (req, res) => {
+      const id = req.params.id;
+      const object = req.body;
+      
+      const filter = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          availableQuantity: object.updatedQuantity,
+        },
+      };
+      console.log(updateDoc);
+      const result = await toolsCollection.updateOne(
+        filter,
+        updateDoc,
+        options
+      );
+      res.send(result);
+    });
   } finally {
     // await client.close();
   }
