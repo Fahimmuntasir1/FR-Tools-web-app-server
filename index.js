@@ -22,6 +22,7 @@ async function run() {
     await client.connect();
     const toolsCollection = client.db("FR-Tools").collection("Tools");
     const userCollection = client.db("FR-Tools").collection("users");
+    const reviewsCollection = client.db("FR-Tools").collection("review");
 
     //get all tools
     app.get("/tools", async (req, res) => {
@@ -53,6 +54,19 @@ async function run() {
       const query = { _id: ObjectId(id) };
       const tool = await toolsCollection.findOne(query);
       res.send(tool);
+    });
+
+    app.get("/review", async (req, res) => {
+      const query = {};
+      const cursor = reviewsCollection.find(query);
+      const reviews = await cursor.toArray();
+      res.send(reviews);
+    });
+    // post / add iteams
+    app.post("/review", async (req, res) => {
+      const newService = req.body;
+      const result = await reviewsCollection.insertOne(newService);
+      res.send(result);
     });
   } finally {
     // await client.close();
