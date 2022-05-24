@@ -17,6 +17,23 @@ const client = new MongoClient(uri, {
   useUnifiedTopology: true,
   serverApi: ServerApiVersion.v1,
 });
+
+function verifyJwt(req, res, next){
+  const authHeader = req.body.authorization
+  if(!authHeader){
+    return res.status(401).send({message : 'unauthorized access'})
+  }
+  const token = authHeader.split(' ')[1]
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function(err, decoded){
+    if(err){
+      return res.status(403).send({message: 'Access Forbidden'})
+    }
+    req.decoded = decoded
+    next()
+  })
+}
+
+
 async function run() {
   try {
     await client.connect();
@@ -96,7 +113,11 @@ async function run() {
       const result = await ordersCollection.insertOne(order);
       res.send(result);
     });
-
+    //get all user
+    app.get('/user', async(req,res)=>{
+      const users = await userCollection.find().toArray()
+      res.send(users)
+    })
 
 
   } finally {
