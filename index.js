@@ -68,7 +68,7 @@ async function run() {
       }
     });
     //check is admin or not
-    app.get("/admin/:email", async (req, res) => {
+    app.get("/admin/:email",verifyJWT, async (req, res) => {
       const email = req.params.email;
       const user = await userCollection.findOne({ email: email });
       const isAdmin = user.role === "admin";
@@ -143,6 +143,11 @@ async function run() {
     app.get("/user", verifyJWT, async (req, res) => {
       const users = await userCollection.find().toArray();
       res.send(users);
+    });
+    //get all orders
+    app.get("/orders",  async (req, res) => {
+      const orders = await ordersCollection.find().toArray();
+      res.send(orders);
     });
 
     // post add items
