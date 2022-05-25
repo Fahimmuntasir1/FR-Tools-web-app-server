@@ -18,7 +18,6 @@ const client = new MongoClient(uri, {
   serverApi: ServerApiVersion.v1,
 });
 
-
 function verifyJWT(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
@@ -49,6 +48,16 @@ async function run() {
       const cursor = toolsCollection.find(query);
       const tools = await cursor.toArray();
       res.send(tools);
+    });
+    //create admin set admin role
+    app.put("/user/admin/:email",verifyJWT, async (req, res) => {
+      const email = req.params.email;
+      const filter = { email: email };
+      const updateDoc = {
+        $set: { role: "admin" },
+      };
+      const result = await userCollection.updateOne(filter, updateDoc);
+      res.send(result);
     });
     //create user or update user
     app.put("/user/:email", async (req, res) => {
