@@ -164,12 +164,12 @@ async function run() {
     });
 
     //   //delete orders
-    //   app.delete("/MyOrders/:id", async (req, res) => {
-    //     const id = req.params.id;
-    //     const query = { _id: ObjectId(id) };
-    //     const result = await orderCollection.deleteOne(query);
-    //     res.send(result);
-    // });
+      app.delete("/MyOrders/:id", async (req, res) => {
+        const id = req.params.id;
+        const query = { _id: ObjectId(id) };
+        const result = await ordersCollection.deleteOne(query);
+        res.send(result);
+    });
 
     // post add items
     app.post("/tools", async (req, res) => {
