@@ -1,5 +1,5 @@
 const express = require("express");
-const cors = require("cors");
+const cors = require('cors');
 const jwt = require("jsonwebtoken");
 const app = express();
 require("dotenv").config();
@@ -7,13 +7,19 @@ const port = process.env.PORT || 5000;
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 // middleware
-const corsConfig = {
-  origin: true,
-  credentials: true,
-};
-app.use(cors(corsConfig));
-app.options("*", cors(corsConfig));
+// const corsConfig = {
+//   origin: true,
+//   credentials: true,
+// };
+// app.use(cors(corsConfig));
+// app.options("*", cors(corsConfig));
+
+
+
+app.use(cors());
 app.use(express.json());
+
+// app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.b8pet.mongodb.net/?retryWrites=true&w=majority`;
 
