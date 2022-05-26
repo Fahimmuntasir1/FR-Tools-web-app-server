@@ -68,7 +68,7 @@ async function run() {
       }
     });
     //check is admin or not
-    app.get("/admin/:email",verifyJWT, async (req, res) => {
+    app.get("/admin/:email", verifyJWT, async (req, res) => {
       const email = req.params.email;
       const user = await userCollection.findOne({ email: email });
       const isAdmin = user.role === "admin";
@@ -145,10 +145,31 @@ async function run() {
       res.send(users);
     });
     //get all orders
-    app.get("/orders",  async (req, res) => {
+    app.get("/orders", async (req, res) => {
       const orders = await ordersCollection.find().toArray();
       res.send(orders);
     });
+    // get particular order by user email
+    app.get("/MyOrders", verifyJWT, async (req, res) => {
+      const decodedEmail = req.decoded.email;
+      const email = req.query.email;
+      if (email === decodedEmail) {
+        const query = { userEmail: email };
+        const cursor = ordersCollection.find(query);
+        const orders = await cursor.toArray();
+        res.send(orders);
+      } else {
+        res.status(403).send({ message: "forbidden access" });
+      }
+    });
+
+    //   //delete orders
+    //   app.delete("/MyOrders/:id", async (req, res) => {
+    //     const id = req.params.id;
+    //     const query = { _id: ObjectId(id) };
+    //     const result = await orderCollection.deleteOne(query);
+    //     res.send(result);
+    // });
 
     // post add items
     app.post("/tools", async (req, res) => {
