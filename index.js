@@ -125,7 +125,6 @@ async function run() {
           availableQuantity: object.updatedQuantity,
         },
       };
-      console.log(updateDoc);
       const result = await toolsCollection.updateOne(
         filter,
         updateDoc,
@@ -144,6 +143,15 @@ async function run() {
       const users = await userCollection.find().toArray();
       res.send(users);
     });
+    //get a user
+    // app.get("/user", async (req, res) => {
+    //   const email = req.query
+    //   console.log(email);
+    //   const query = { email: email };
+    //   const cursor = userCollection.find(query);
+    //   const users = await cursor.toArray();
+    //   res.send(users);
+    // });
     //get all orders
     app.get("/orders", async (req, res) => {
       const orders = await ordersCollection.find().toArray();
