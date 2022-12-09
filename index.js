@@ -108,7 +108,7 @@ async function run() {
       const tool = await toolsCollection.findOne(query);
       res.send(tool);
     });
-
+    // get all reviews
     app.get("/review", async (req, res) => {
       const query = {};
       const cursor = reviewsCollection.find(query);
